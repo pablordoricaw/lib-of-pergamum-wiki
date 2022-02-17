@@ -1,13 +1,13 @@
 name: Wiki Sync
 
 on:
+  gollum:
   push:
     branches: [ wiki ]
     paths:
       - "docs/**"
   repository_dispatch:
     types: [docs]
-  gollum:
   
 env:
   GIT_BOT_NAME: "github-actions[bot]"
