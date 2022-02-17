@@ -10,8 +10,8 @@ on:
     types: [docs]
   
 env:
-  GIT_BOT_NAME: "github-actions[bot]"
-  GIT_BOT_EMAIL: "github-actions[bot]@users.noreply.github.com"
+  GIT_BOT_NAME: github-actions[bot]
+  GIT_BOT_EMAIL: github-actions[bot]@users.noreply.github.com
   
 jobs:
   job-sync-docs-to-wiki:
@@ -24,13 +24,12 @@ jobs:
       - name: Sync docs/ to wiki
         uses: newrelic/wiki-sync-action@v1.0.0
         with:
-          source: "docs"
-          destination: "wiki"
+          source: docs
+          destination: wiki
           token: ${{ secrets.WIKI_SYNC_TOKEN }}
           gitAuthorName: ${{ env.GIT_BOT_NAME }}
           gitAuthorEmail: ${{ env.GIT_BOT_EMAIL }}
           branch: wiki
-          commitMessage: "Wiki Sync from docs/"
           
   job-sync-wiki-to-docs:
     runs-on: ubuntu-latest
@@ -45,10 +44,9 @@ jobs:
       - name: Sync to wiki docs/
         uses: newrelic/wiki-sync-action@v1.0.0
         with:
-          source: "wiki"
-          destination: "docs"
+          source: wiki
+          destination: docs
           token: ${{ secrets.WIKI_SYNC_TOKEN }}
           gitAuthorName: ${{ env.GIT_BOT_NAME }}
           gitAuthorEmail: ${{ env.GIT_BOT_EMAIL }}
           branch: wiki
-          commitMessage: "docs/ Sync from Wiki"
