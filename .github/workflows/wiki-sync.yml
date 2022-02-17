@@ -1,0 +1,28 @@
+name: Wiki Sync
+
+on:
+  push:
+    branches: [ wiki ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Bi-directional Wiki Sync Action
+        uses: newrelic/wiki-sync-action@v1.0.0
+        with:
+          # Source directory/location of file sync (ex: `docs`).
+          source: "docs"
+          # Destination directory/location for file sync (ex: `wiki`).
+          destination: "wiki"
+          # Github personal access token with at least 'repo' authorization.
+          token: ${{ secrets.WIKI_SYNC_TOKEN }}
+          # Author name to use for committing to repository. Default: `github.actor`
+          gitAuthorName: "github-actions[bot]"
+          # Author name to use for committing to repository. Default: `github.actor@users.noreply.github.com
+          gitAuthorEmail: "github-actions[bot]@users.noreply.github.com"
+          # Default branch to commit to. Default: `master`
+          branch: wiki
+          # Message for committing files to repository.
+          commitMessage: "Wiki Sync"
