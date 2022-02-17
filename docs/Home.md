@@ -1,3 +1,5 @@
-Welcome to the wiki!
+Welcome ✋!
 
-This is an empty wiki just meant to test the Bi-directional Wiki Sync action
+This is an empty wiki just meant to test the Bi-directional Wiki Sync action.
+
+
