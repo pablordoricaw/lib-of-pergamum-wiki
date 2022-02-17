@@ -19,10 +19,10 @@ jobs:
     if: github.event_name != 'gollum'
     steps:
       - name: Checkout Repo
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       
       - name: Sync docs/ to wiki
-      - uses: newrelic/wiki-sync-action@v1.0.0
+        uses: newrelic/wiki-sync-action@v1.0.0
         with:
           source: "docs"
           destination: "wiki"
@@ -37,13 +37,13 @@ jobs:
     if: github.event_name == 'gollum'
     steps:
       - name: Checkout Repo
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         with:
           token: ${{ secrets.WIKI_SYNC_TOKEN }}
           ref: wiki
           
       - name: Sync to wiki docs/
-      - uses: newrelic/wiki-sync-action@v1.0.0
+        uses: newrelic/wiki-sync-action@v1.0.0
         with:
           source: "wiki"
           destination: "docs"
