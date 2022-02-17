@@ -3,26 +3,52 @@ name: Wiki Sync
 on:
   push:
     branches: [ wiki ]
-
+    paths:
+      - "docs/**"
+  repository_dispatch:
+    types: [docs]
+  gollum:
+  
+env:
+  GIT_BOT_NAME: "github-actions[bot]"
+  GIT_BOT_EMAIL: "github-actions[bot]@users.noreply.github.com"
+  
 jobs:
-  build:
+  job-sync-docs-to-wiki:
     runs-on: ubuntu-latest
+    if: github.event_name != 'gollum'
     steps:
+      - name: Checkout Repo
       - uses: actions/checkout@v2
-      - name: Bi-directional Wiki Sync Action
+      
+      - name: Sync docs/ to wiki
         uses: newrelic/wiki-sync-action@v1.0.0
         with:
-          # Source directory/location of file sync (ex: `docs`).
           source: "docs"
-          # Destination directory/location for file sync (ex: `wiki`).
           destination: "wiki"
-          # Github personal access token with at least 'repo' authorization.
           token: ${{ secrets.WIKI_SYNC_TOKEN }}
-          # Author name to use for committing to repository. Default: `github.actor`
-          gitAuthorName: "github-actions[bot]"
-          # Author name to use for committing to repository. Default: `github.actor@users.noreply.github.com
-          gitAuthorEmail: "github-actions[bot]@users.noreply.github.com"
-          # Default branch to commit to. Default: `master`
+          gitAuthorName: ${{ env.GIT_BOT_NAME }}
+          gitAuthorEmail: ${{ env.GIT_BOT_EMAIL }}
           branch: wiki
-          # Message for committing files to repository.
-          commitMessage: "Wiki Sync"
+          commitMessage: "Wiki Sync from docs/"
+          
+  job-sync-wiki-to-docs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'gollum'
+    steps:
+      - name: Checkout Repo
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.WIKI_SYNC_TOKEN }}
+          ref: wiki
+          
+      - name: Sync to wiki docs/
+        uses: newrelic/wiki-sync-action@v1.0.0
+        with:
+          source: "wiki"
+          destination: "docs"
+          token: ${{ secrets.WIKI_SYNC_TOKEN }}
+          gitAuthorName: ${{ env.GIT_BOT_NAME }}
+          gitAuthorEmail: ${{ env.GIT_BOT_EMAIL }}
+          branch: wiki
+          commitMessage: "docs/ Sync from Wiki"
